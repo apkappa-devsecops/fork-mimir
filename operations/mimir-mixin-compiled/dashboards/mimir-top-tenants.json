@@ -142,7 +142,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "topk($limit,\n  sum by (user) (\n    cortex_ingester_active_series{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n    / on(cluster, namespace) group_left\n    max by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})\n  )\n)\n",
+                        "expr": "topk($limit,\n  sum by (user) (\n    cortex_ingester_active_series{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n    / on(k8s_cluster_unique_name, k8s_namespace_name) group_left\n    max by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})\n  )\n)\n",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -283,7 +283,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "topk($limit, sum by (user) (\n  (\n      sum by (user, cluster, namespace) (cortex_ingester_memory_series_created_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} )\n      -\n      sum by (user, cluster, namespace) (cortex_ingester_memory_series_removed_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} )\n  )\n  / on(cluster, namespace) group_left\n  max by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"} )\n)\n)",
+                        "expr": "topk($limit, sum by (user) (\n  (\n      sum by (user, k8s_cluster_unique_name, k8s_namespace_name) (cortex_ingester_memory_series_created_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} )\n      -\n      sum by (user, k8s_cluster_unique_name, k8s_namespace_name) (cortex_ingester_memory_series_removed_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} )\n  )\n  / on(k8s_cluster_unique_name, k8s_namespace_name) group_left\n  max by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"} )\n)\n)",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -378,7 +378,7 @@
                   "span": 12,
                   "targets": [
                      {
-                        "expr": "sum by (user) (\n  (\n      sum by (user, cluster, namespace) (cortex_ingester_memory_series_created_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} )\n      -\n      sum by (user, cluster, namespace) (cortex_ingester_memory_series_removed_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} )\n  )\n  / on(cluster, namespace) group_left\n  max by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"} )\n)\n\nand\ntopk($limit, sum by (user) (\n  (\n      sum by (user, cluster, namespace) (cortex_ingester_memory_series_created_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} @ end())\n      -\n      sum by (user, cluster, namespace) (cortex_ingester_memory_series_removed_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} @ end())\n  )\n  / on(cluster, namespace) group_left\n  max by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"} @ end())\n)\n - sum by (user) (\n  (\n      sum by (user, cluster, namespace) (cortex_ingester_memory_series_created_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} @ start())\n      -\n      sum by (user, cluster, namespace) (cortex_ingester_memory_series_removed_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} @ start())\n  )\n  / on(cluster, namespace) group_left\n  max by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"} @ start())\n)\n)\n",
+                        "expr": "sum by (user) (\n  (\n      sum by (user, k8s_cluster_unique_name, k8s_namespace_name) (cortex_ingester_memory_series_created_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} )\n      -\n      sum by (user, k8s_cluster_unique_name, k8s_namespace_name) (cortex_ingester_memory_series_removed_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} )\n  )\n  / on(k8s_cluster_unique_name, k8s_namespace_name) group_left\n  max by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"} )\n)\n\nand\ntopk($limit, sum by (user) (\n  (\n      sum by (user, k8s_cluster_unique_name, k8s_namespace_name) (cortex_ingester_memory_series_created_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} @ end())\n      -\n      sum by (user, k8s_cluster_unique_name, k8s_namespace_name) (cortex_ingester_memory_series_removed_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} @ end())\n  )\n  / on(k8s_cluster_unique_name, k8s_namespace_name) group_left\n  max by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"} @ end())\n)\n - sum by (user) (\n  (\n      sum by (user, k8s_cluster_unique_name, k8s_namespace_name) (cortex_ingester_memory_series_created_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} @ start())\n      -\n      sum by (user, k8s_cluster_unique_name, k8s_namespace_name) (cortex_ingester_memory_series_removed_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"} @ start())\n  )\n  / on(k8s_cluster_unique_name, k8s_namespace_name) group_left\n  max by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"} @ start())\n)\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{ user }}",
                         "legendLink": null
@@ -484,7 +484,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "topk($limit, sum by (user) (rate(cortex_distributor_received_samples_total{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[5m])))",
+                        "expr": "topk($limit, sum by (user) (rate(cortex_distributor_received_samples_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[5m])))",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -579,7 +579,7 @@
                   "span": 12,
                   "targets": [
                      {
-                        "expr": "sum by (user) (rate(cortex_distributor_received_samples_total{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))\nand\ntopk($limit,\n  sum by (user) (rate(cortex_distributor_received_samples_total{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval] @ end()))\n  -\n  sum by (user) (rate(cortex_distributor_received_samples_total{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval] @ start()))\n)\n",
+                        "expr": "sum by (user) (rate(cortex_distributor_received_samples_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))\nand\ntopk($limit,\n  sum by (user) (rate(cortex_distributor_received_samples_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval] @ end()))\n  -\n  sum by (user) (rate(cortex_distributor_received_samples_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval] @ start()))\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{ user }}",
                         "legendLink": null
@@ -685,7 +685,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "topk($limit, sum by (user) (rate(cortex_discarded_samples_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*|distributor.*|cortex|mimir|mimir-write.*))\"}[5m])))",
+                        "expr": "topk($limit, sum by (user) (rate(cortex_discarded_samples_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*|distributor.*|cortex|mimir|mimir-write.*))\"}[5m])))",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -780,7 +780,7 @@
                   "span": 12,
                   "targets": [
                      {
-                        "expr": "sum by (user) (rate(cortex_discarded_samples_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*|distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))\nand\ntopk($limit,\n  sum by (user) (rate(cortex_discarded_samples_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*|distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval] @ end()))\n  -\n  sum by (user) (rate(cortex_discarded_samples_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*|distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval] @ start()))\n)\n",
+                        "expr": "sum by (user) (rate(cortex_discarded_samples_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*|distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))\nand\ntopk($limit,\n  sum by (user) (rate(cortex_discarded_samples_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*|distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval] @ end()))\n  -\n  sum by (user) (rate(cortex_discarded_samples_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*|distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval] @ start()))\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{ user }}",
                         "legendLink": null
@@ -886,7 +886,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "topk($limit,\n  sum by (user) (\n    cortex_ingester_tsdb_exemplar_series_with_exemplars_in_storage{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n    / on(cluster, namespace) group_left\n    max by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})\n  )\n)\n",
+                        "expr": "topk($limit,\n  sum by (user) (\n    cortex_ingester_tsdb_exemplar_series_with_exemplars_in_storage{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n    / on(k8s_cluster_unique_name, k8s_namespace_name) group_left\n    max by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})\n  )\n)\n",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -1027,7 +1027,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "topk($limit, sum by (user) (rate(cortex_distributor_received_exemplars_total{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[5m])))",
+                        "expr": "topk($limit, sum by (user) (rate(cortex_distributor_received_exemplars_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[5m])))",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -1168,7 +1168,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "topk($limit, sum by (rule_group, user) (cortex_prometheus_rule_group_rules{cluster=~\"$cluster\", job=~\"($namespace)/((ruler|cortex|mimir|mimir-backend.*))\"}))",
+                        "expr": "topk($limit, sum by (rule_group, user) (cortex_prometheus_rule_group_rules{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler|cortex|mimir|mimir-backend.*))\"}))",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -1309,7 +1309,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "topk($limit, sum by (rule_group, user) (cortex_prometheus_rule_group_last_duration_seconds{cluster=~\"$cluster\", job=~\"($namespace)/((ruler|cortex|mimir|mimir-backend.*))\"}))",
+                        "expr": "topk($limit, sum by (rule_group, user) (cortex_prometheus_rule_group_last_duration_seconds{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler|cortex|mimir|mimir-backend.*))\"}))",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -1450,7 +1450,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "topk($limit,\n  sum by (user) (cortex_bucket_index_estimated_compaction_jobs{cluster=~\"$cluster\", job=~\"($namespace)/((compactor.*|cortex|mimir|mimir-backend.*))\"})\n  and ignoring(user)\n  (sum(rate(cortex_bucket_index_estimated_compaction_jobs_errors_total{cluster=~\"$cluster\", job=~\"($namespace)/((compactor.*|cortex|mimir|mimir-backend.*))\"}[$__rate_interval])) == 0)\n)\n",
+                        "expr": "topk($limit,\n  sum by (user) (cortex_bucket_index_estimated_compaction_jobs{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((compactor.*|cortex|mimir|mimir-backend.*))\"})\n  and ignoring(user)\n  (sum(rate(cortex_bucket_index_estimated_compaction_jobs_errors_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((compactor.*|cortex|mimir|mimir-backend.*))\"}[$__rate_interval])) == 0)\n)\n",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -1538,7 +1538,7 @@
                "multi": true,
                "name": "cluster",
                "options": [ ],
-               "query": "label_values(cortex_build_info, cluster)",
+               "query": "label_values(cortex_build_info, k8s_cluster_unique_name)",
                "refresh": 1,
                "regex": "",
                "sort": 1,
@@ -1562,7 +1562,7 @@
                "multi": true,
                "name": "namespace",
                "options": [ ],
-               "query": "label_values(cortex_build_info{cluster=~\"$cluster\"}, namespace)",
+               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, k8s_namespace_name)",
                "refresh": 1,
                "regex": "",
                "sort": 1,

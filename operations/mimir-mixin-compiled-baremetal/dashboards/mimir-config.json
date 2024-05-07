@@ -73,7 +73,7 @@
                   "span": 12,
                   "targets": [
                      {
-                        "expr": "count(cortex_config_hash{cluster=~\"$cluster\", namespace=~\"$namespace\"}) by (sha256)",
+                        "expr": "count(cortex_config_hash{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\"}) by (sha256)",
                         "format": "time_series",
                         "legendFormat": "sha256:{{sha256}}",
                         "legendLink": null
@@ -133,7 +133,7 @@
                   "span": 12,
                   "targets": [
                      {
-                        "expr": "count(cortex_runtime_config_hash{cluster=~\"$cluster\", namespace=~\"$namespace\"}) by (sha256)",
+                        "expr": "count(cortex_runtime_config_hash{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\"}) by (sha256)",
                         "format": "time_series",
                         "legendFormat": "sha256:{{sha256}}",
                         "legendLink": null
@@ -186,7 +186,7 @@
                "multi": true,
                "name": "cluster",
                "options": [ ],
-               "query": "label_values(cortex_build_info, cluster)",
+               "query": "label_values(cortex_build_info, k8s_cluster_unique_name)",
                "refresh": 1,
                "regex": "",
                "sort": 1,
@@ -210,7 +210,7 @@
                "multi": true,
                "name": "namespace",
                "options": [ ],
-               "query": "label_values(cortex_build_info{cluster=~\"$cluster\"}, namespace)",
+               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, k8s_namespace_name)",
                "refresh": 1,
                "regex": "",
                "sort": 1,

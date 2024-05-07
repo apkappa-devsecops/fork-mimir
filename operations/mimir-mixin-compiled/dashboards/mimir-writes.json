@@ -90,7 +90,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(cluster_namespace_job:cortex_distributor_received_samples:rate5m{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})",
+                        "expr": "sum(k8s_cluster_unique_name_k8s_namespace_name_job:cortex_distributor_received_samples:rate5m{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -166,7 +166,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(cluster_namespace_job:cortex_distributor_received_exemplars:rate5m{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})",
+                        "expr": "sum(k8s_cluster_unique_name_k8s_namespace_name_job:cortex_distributor_received_exemplars:rate5m{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -242,7 +242,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(cortex_ingester_memory_series{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n/ on(cluster, namespace) group_left\nmax by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}))\n",
+                        "expr": "sum(cortex_ingester_memory_series{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n/ on(k8s_cluster_unique_name, k8s_namespace_name) group_left\nmax by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}))\n",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -318,7 +318,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(cortex_ingester_tsdb_exemplar_exemplars_in_storage{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n/ on(cluster, namespace) group_left\nmax by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}))\n",
+                        "expr": "sum(cortex_ingester_tsdb_exemplar_exemplars_in_storage{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n/ on(k8s_cluster_unique_name, k8s_namespace_name) group_left\nmax by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}))\n",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -393,7 +393,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "count(count by(user) (cortex_ingester_active_series{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}))",
+                        "expr": "count(count by(user) (cortex_ingester_active_series{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}))",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -623,7 +623,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -672,19 +672,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"})) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "1e3 * sum(cluster_job_route:cortex_request_duration_seconds_sum:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"}) / sum(cluster_job_route:cortex_request_duration_seconds_count:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"})",
+                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"})",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -734,13 +734,13 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "histogram_quantile(0.99, sum by(le, pod) (rate(cortex_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"}[$__rate_interval])))",
+                        "expr": "histogram_quantile(0.99, sum by(le, k8s_pod_uid) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", route=~\"/distributor.Distributor/Push|/httpgrpc.*|api_(v1|prom)_push|otlp_v1_metrics\"}[$__rate_interval])))",
                         "format": "time_series",
                         "legendFormat": "",
                         "legendLink": null
                      }
                   ],
-                  "title": "Per pod p99 latency",
+                  "title": "Per k8s_pod_uid p99 latency",
                   "type": "timeseries"
                }
             ],
@@ -931,7 +931,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",route=\"/cortex.Ingester/Push\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",route=\"/cortex.Ingester/Push\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -980,19 +980,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum by (le) (cluster_job_route:cortex_request_duration_seconds_bucket:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"})) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "1e3 * sum(cluster_job_route:cortex_request_duration_seconds_sum:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"}) / sum(cluster_job_route:cortex_request_duration_seconds_count:sum_rate{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"})",
+                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"})",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -1042,13 +1042,13 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "histogram_quantile(0.99, sum by(le, pod) (rate(cortex_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"}[$__rate_interval])))",
+                        "expr": "histogram_quantile(0.99, sum by(le, k8s_pod_uid) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=\"/cortex.Ingester/Push\"}[$__rate_interval])))",
                         "format": "time_series",
                         "legendFormat": "",
                         "legendLink": null
                      }
                   ],
-                  "title": "Per pod p99 latency",
+                  "title": "Per k8s_pod_uid p99 latency",
                   "type": "timeseries"
                }
             ],
@@ -1152,19 +1152,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_max_replicas{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n  # Add the scaletargetref_name label for readability\n  + on (cluster, namespace, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n)\n",
+                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_max_replicas{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n  # Add the scaletargetref_name label for readability\n  + on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n)\n",
                         "format": "time_series",
                         "legendFormat": "Max {{ scaletargetref_name }}",
                         "legendLink": null
                      },
                      {
-                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_status_current_replicas{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n  # HPA doesn't go to 0 replicas, so we multiply by 0 if the HPA is not active\n  * on (cluster, namespace, horizontalpodautoscaler)\n    kube_horizontalpodautoscaler_status_condition{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\", condition=\"ScalingActive\", status=\"true\"}\n  # Add the scaletargetref_name label for readability\n  + on (cluster, namespace, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n)\n",
+                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_status_current_replicas{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n  # HPA doesn't go to 0 replicas, so we multiply by 0 if the HPA is not active\n  * on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler)\n    kube_horizontalpodautoscaler_status_condition{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\", condition=\"ScalingActive\", status=\"true\"}\n  # Add the scaletargetref_name label for readability\n  + on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n)\n",
                         "format": "time_series",
                         "legendFormat": "Current {{ scaletargetref_name }}",
                         "legendLink": null
                      },
                      {
-                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_min_replicas{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n  # Add the scaletargetref_name label for readability\n  + on (cluster, namespace, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n)\n",
+                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_min_replicas{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n  # Add the scaletargetref_name label for readability\n  + on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"}\n)\n",
                         "format": "time_series",
                         "legendFormat": "Min {{ scaletargetref_name }}",
                         "legendLink": null
@@ -1213,7 +1213,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{cluster=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*cpu.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(cluster, namespace, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
+                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*cpu.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, k8s_namespace_name, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{ scaler }}",
                         "legendLink": null
@@ -1262,7 +1262,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{cluster=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*memory.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(cluster, namespace, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
+                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*memory.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, k8s_namespace_name, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{ scaler }}",
                         "legendLink": null
@@ -1311,7 +1311,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(cluster, namespace, scaler, metric, scaledObject) (\n  label_replace(\n    rate(keda_scaler_errors[$__rate_interval]),\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.+)\"\n  )\n) +\non(cluster, namespace, metric, scaledObject) group_left\nlabel_replace(\n  label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{cluster=~\"$cluster\", namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"} * 0,\n      \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  ),\n  \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n)\n",
+                        "expr": "sum by(k8s_cluster_unique_name, k8s_namespace_name, scaler, metric, scaledObject) (\n  label_replace(\n    rate(keda_scaler_errors[$__rate_interval]),\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.+)\"\n  )\n) +\non(k8s_cluster_unique_name, k8s_namespace_name, metric, scaledObject) group_left\nlabel_replace(\n  label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-distributor\"} * 0,\n      \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  ),\n  \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{scaler}} failures",
                         "legendLink": null
@@ -1507,7 +1507,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -1556,19 +1556,19 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(cortex_kv_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(cortex_kv_request_duration_seconds_sum{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_kv_request_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-hatracker\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -1782,7 +1782,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -1831,19 +1831,19 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(cortex_kv_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(cortex_kv_request_duration_seconds_sum{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_kv_request_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\", kv_name=~\"distributor-(lifecycler|ring)\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -2057,7 +2057,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -2106,19 +2106,19 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(cortex_kv_request_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(cortex_kv_request_duration_seconds_sum{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_kv_request_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_kv_request_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", kv_name=~\"ingester-.*\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -2228,13 +2228,13 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_ingester_shipper_uploads_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) - sum(rate(cortex_ingester_shipper_upload_failures_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_shipper_uploads_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) - sum(rate(cortex_ingester_shipper_upload_failures_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "successful",
                         "legendLink": null
                      },
                      {
-                        "expr": "sum(rate(cortex_ingester_shipper_upload_failures_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_shipper_upload_failures_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "failed",
                         "legendLink": null
@@ -2284,19 +2284,19 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",component=\"ingester\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",component=\"ingester\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",component=\"ingester\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",component=\"ingester\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",component=\"ingester\",operation=\"upload\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",component=\"ingester\",operation=\"upload\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",component=\"ingester\",operation=\"upload\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",component=\"ingester\",operation=\"upload\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -2406,13 +2406,13 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_compactions_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_tsdb_compactions_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "successful",
                         "legendLink": null
                      },
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_compactions_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_tsdb_compactions_failed_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "failed",
                         "legendLink": null
@@ -2462,19 +2462,19 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_bucket{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_sum{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_ingester_tsdb_compaction_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -2584,13 +2584,13 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_wal_truncations_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) - sum(rate(cortex_ingester_tsdb_wal_truncations_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_tsdb_wal_truncations_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) - sum(rate(cortex_ingester_tsdb_wal_truncations_failed_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "successful",
                         "legendLink": null
                      },
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_wal_truncations_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_tsdb_wal_truncations_failed_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "failed",
                         "legendLink": null
@@ -2670,13 +2670,13 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_checkpoint_creations_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) - sum(rate(cortex_ingester_tsdb_checkpoint_creations_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_tsdb_checkpoint_creations_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) - sum(rate(cortex_ingester_tsdb_checkpoint_creations_failed_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "successful",
                         "legendLink": null
                      },
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_checkpoint_creations_failed_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_tsdb_checkpoint_creations_failed_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "failed",
                         "legendLink": null
@@ -2726,7 +2726,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_wal_truncate_duration_seconds_sum{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))\n/\nsum(rate(cortex_ingester_tsdb_wal_truncate_duration_seconds_count{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) >= 0\n",
+                        "expr": "sum(rate(cortex_ingester_tsdb_wal_truncate_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))\n/\nsum(rate(cortex_ingester_tsdb_wal_truncate_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval])) >= 0\n",
                         "format": "time_series",
                         "legendFormat": "avg",
                         "legendLink": null
@@ -2806,13 +2806,13 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_wal_corruptions_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_tsdb_wal_corruptions_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "WAL",
                         "legendLink": null
                      },
                      {
-                        "expr": "sum(rate(cortex_ingester_tsdb_mmap_chunk_corruptions_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_ingester_tsdb_mmap_chunk_corruptions_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "mmap-ed chunks",
                         "legendLink": null
@@ -2873,7 +2873,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum(cluster_namespace_job:cortex_distributor_exemplars_in:rate5m{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})",
+                        "expr": "sum(k8s_cluster_unique_name_k8s_namespace_name_job:cortex_distributor_exemplars_in:rate5m{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})",
                         "format": "time_series",
                         "legendFormat": "incoming exemplars",
                         "legendLink": null
@@ -2922,7 +2922,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum(cluster_namespace_job:cortex_distributor_received_exemplars:rate5m{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})",
+                        "expr": "sum(k8s_cluster_unique_name_k8s_namespace_name_job:cortex_distributor_received_exemplars:rate5m{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})",
                         "format": "time_series",
                         "legendFormat": "received exemplars",
                         "legendLink": null
@@ -2971,7 +2971,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum(\n  cluster_namespace_job:cortex_ingester_ingested_exemplars:rate5m{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n  / on(cluster, namespace) group_left\n  max by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})\n)\n",
+                        "expr": "sum(\n  k8s_cluster_unique_name_k8s_namespace_name_job:cortex_ingester_ingested_exemplars:rate5m{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n  / on(k8s_cluster_unique_name, k8s_namespace_name) group_left\n  max by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})\n)\n",
                         "format": "time_series",
                         "legendFormat": "ingested exemplars",
                         "legendLink": null
@@ -3020,7 +3020,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum(\n  cluster_namespace_job:cortex_ingester_tsdb_exemplar_exemplars_appended:rate5m{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n  / on(cluster, namespace) group_left\n  max by (cluster, namespace) (cortex_distributor_replication_factor{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})\n)\n",
+                        "expr": "sum(\n  k8s_cluster_unique_name_k8s_namespace_name_job:cortex_ingester_tsdb_exemplar_exemplars_appended:rate5m{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}\n  / on(k8s_cluster_unique_name, k8s_namespace_name) group_left\n  max by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_distributor_replication_factor{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"})\n)\n",
                         "format": "time_series",
                         "legendFormat": "appended exemplars",
                         "legendLink": null
@@ -3080,7 +3080,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by (reason) (rate(cortex_distributor_instance_rejected_requests_total{cluster=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum by (reason) (rate(cortex_distributor_instance_rejected_requests_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((distributor.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "{{reason}}",
                         "legendLink": null
@@ -3128,7 +3128,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by (reason) (rate(cortex_ingester_instance_rejected_requests_total{cluster=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
+                        "expr": "sum by (reason) (rate(cortex_ingester_instance_rejected_requests_total{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "{{reason}}",
                         "legendLink": null
@@ -3181,7 +3181,7 @@
                "multi": true,
                "name": "cluster",
                "options": [ ],
-               "query": "label_values(cortex_build_info, cluster)",
+               "query": "label_values(cortex_build_info, k8s_cluster_unique_name)",
                "refresh": 1,
                "regex": "",
                "sort": 1,
@@ -3205,7 +3205,7 @@
                "multi": true,
                "name": "namespace",
                "options": [ ],
-               "query": "label_values(cortex_build_info{cluster=~\"$cluster\"}, namespace)",
+               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, k8s_namespace_name)",
                "refresh": 1,
                "regex": "",
                "sort": 1,

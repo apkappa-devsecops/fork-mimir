@@ -175,8 +175,8 @@
     },
 
     // The label used to differentiate between different Kubernetes clusters.
-    per_cluster_label: 'cluster',
-    per_namespace_label: 'namespace',
+    per_cluster_label: 'k8s_cluster_unique_name',
+    per_namespace_label: 'k8s_namespace_name',
     per_job_label: 'job',
     per_component_loki_label: 'name',
 
@@ -213,7 +213,7 @@
     alertmanager_im_enabled: false,
 
     // The label used to differentiate between different application instances (i.e. 'pod' in a kubernetes install).
-    per_instance_label: 'pod',
+    per_instance_label: 'k8s_pod_uid',
 
     deployment_type: 'kubernetes',
     // System mount point where mimir stores its data, used for baremetal
@@ -605,7 +605,7 @@
     },
 
     // The label used to differentiate between different nodes (i.e. servers).
-    per_node_label: 'instance',
+    per_node_label: 'host_name',
 
     // Whether certain dashboard description headers should be shown
     show_dashboard_descriptions: {
