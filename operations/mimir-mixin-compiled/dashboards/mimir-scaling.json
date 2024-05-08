@@ -201,7 +201,7 @@
                   ],
                   "targets": [
                      {
-                        "expr": "sort_desc(\n  k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\"}\n    > ignoring(reason) group_left\n  k8s_cluster_unique_name_k8s_namespace_name_deployment:actual_replicas:count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\"}\n)\n",
+                        "expr": "sort_desc(\n  k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\"}\n    > ignoring(reason) group_left\n  k8s_cluster_unique_name_service_namespace_deployment:actual_replicas:count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\"}\n)\n",
                         "format": "table",
                         "instant": true,
                         "legendFormat": "",
@@ -313,7 +313,7 @@
                "multi": true,
                "name": "namespace",
                "options": [ ],
-               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, k8s_namespace_name)",
+               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, service_namespace)",
                "refresh": 1,
                "regex": "",
                "sort": 1,

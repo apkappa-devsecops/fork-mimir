@@ -124,7 +124,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by(instance) (rate(node_cpu_seconds_total{mode=\"user\",k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]))",
+                        "expr": "sum by(instance) (rate(node_cpu_seconds_total{mode=\"user\",k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "{{instance}}",
                         "legendLink": null
@@ -172,7 +172,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by(instance) (go_memstats_heap_inuse_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"})",
+                        "expr": "sum by(instance) (go_memstats_heap_inuse_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"})",
                         "format": "time_series",
                         "legendFormat": "{{instance}}",
                         "legendLink": null
@@ -283,7 +283,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "node_memory_Active_anon_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}\n+ node_memory_SwapCached_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}\n",
+                        "expr": "node_memory_Active_anon_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}\n+ node_memory_SwapCached_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}\n",
                         "format": "time_series",
                         "legendFormat": "{{instance}}",
                         "legendLink": null
@@ -382,7 +382,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "node_memory_MemTotal_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_MemFree_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_Buffers_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_Cached_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_Slab_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_PageTables_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_SwapCached_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}\n",
+                        "expr": "node_memory_MemTotal_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_MemFree_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_Buffers_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_Cached_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_Slab_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_PageTables_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}\n- node_memory_SwapCached_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}\n",
                         "format": "time_series",
                         "legendFormat": "{{instance}}",
                         "legendLink": null
@@ -442,7 +442,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by(instance) (rate(node_network_receive_bytes_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]))",
+                        "expr": "sum by(instance) (rate(node_network_receive_bytes_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "{{instance}}",
                         "legendLink": null
@@ -490,7 +490,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by(instance) (rate(node_network_transmit_bytes_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]))",
+                        "expr": "sum by(instance) (rate(node_network_transmit_bytes_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "{{instance}}",
                         "legendLink": null
@@ -550,7 +550,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(host_name, instance, device) (\n  rate(\n    node_disk_written_bytes_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]\n  )\n)\n",
+                        "expr": "sum by(host_name, instance, device) (\n  rate(\n    node_disk_written_bytes_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]\n  )\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{instance}} - {{device}}",
                         "legendLink": null
@@ -598,7 +598,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(host_name, instance, device) (\n  rate(\n    node_disk_read_bytes_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]\n  )\n)\n",
+                        "expr": "sum by(host_name, instance, device) (\n  rate(\n    node_disk_read_bytes_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\"}[$__rate_interval]\n  )\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{instance}} - {{device}}",
                         "legendLink": null
@@ -649,7 +649,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "1 - ((node_filesystem_avail_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\", mountpoint=\"/\"})\n    / node_filesystem_size_bytes{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",instance=~\".*compactor.*\", mountpoint=\"/\"})\n",
+                        "expr": "1 - ((node_filesystem_avail_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\", mountpoint=\"/\"})\n    / node_filesystem_size_bytes{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",instance=~\".*compactor.*\", mountpoint=\"/\"})\n",
                         "format": "time_series",
                         "legendFormat": "{{instance}}",
                         "legendLink": null
@@ -726,7 +726,7 @@
                "multi": true,
                "name": "namespace",
                "options": [ ],
-               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, k8s_namespace_name)",
+               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, service_namespace)",
                "refresh": 1,
                "regex": "",
                "sort": 1,

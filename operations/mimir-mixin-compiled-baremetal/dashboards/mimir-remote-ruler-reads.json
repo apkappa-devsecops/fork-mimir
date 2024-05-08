@@ -91,7 +91,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(\n  rate(\n    cortex_request_duration_seconds_count{\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\",\n      route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"\n    }[$__rate_interval]\n  )\n)\n",
+                        "expr": "sum(\n  rate(\n    cortex_request_duration_seconds_count{\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-frontend.*))\",\n      route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"\n    }[$__rate_interval]\n  )\n)\n",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -320,7 +320,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -369,19 +369,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})",
+                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"})",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -431,7 +431,7 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval])))",
+                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-frontend.*))\", route=~\"/httpgrpc.HTTP/Handle|.*api_v1_query\"}[$__rate_interval])))",
                         "format": "time_series",
                         "legendFormat": "",
                         "legendLink": null
@@ -628,7 +628,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -678,19 +678,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(cortex_query_scheduler_queue_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_query_scheduler_queue_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -759,7 +759,7 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "sum(min_over_time(cortex_query_scheduler_queue_length{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__interval]))",
+                        "expr": "sum(min_over_time(cortex_query_scheduler_queue_length{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__interval]))",
                         "format": "time_series",
                         "legendFormat": "Queue length",
                         "legendLink": null
@@ -821,7 +821,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "label_replace(histogram_quantile(0.99, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__rate_interval])) by (le, additional_queue_dimensions)) * 1e3, \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
+                        "expr": "label_replace(histogram_quantile(0.99, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__rate_interval])) by (le, additional_queue_dimensions)) * 1e3, \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
                         "format": "time_series",
                         "legendFormat": "99th Percentile: {{ additional_queue_dimensions }}",
                         "refId": "A"
@@ -871,7 +871,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "label_replace(histogram_quantile(0.50, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__rate_interval])) by (le, additional_queue_dimensions)) * 1e3, \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
+                        "expr": "label_replace(histogram_quantile(0.50, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__rate_interval])) by (le, additional_queue_dimensions)) * 1e3, \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
                         "format": "time_series",
                         "legendFormat": "50th Percentile: {{ additional_queue_dimensions }}",
                         "refId": "A"
@@ -921,7 +921,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "label_replace(sum(rate(cortex_query_scheduler_queue_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__rate_interval])) by (additional_queue_dimensions) * 1e3 / sum(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-query-scheduler.*))\"}[$__rate_interval])) by (additional_queue_dimensions), \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
+                        "expr": "label_replace(sum(rate(cortex_query_scheduler_queue_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__rate_interval])) by (additional_queue_dimensions) * 1e3 / sum(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-query-scheduler.*))\"}[$__rate_interval])) by (additional_queue_dimensions), \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
                         "format": "time_series",
                         "legendFormat": "Average: {{ additional_queue_dimensions }}",
                         "refId": "C"
@@ -1117,7 +1117,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_querier_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_querier_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -1166,19 +1166,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}) / sum(k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})",
+                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}) / sum(k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -1228,7 +1228,7 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_querier_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval])))",
+                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_querier_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval])))",
                         "format": "time_series",
                         "legendFormat": "",
                         "legendLink": null
@@ -1338,19 +1338,19 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_max_replicas{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n  # Add the scaletargetref_name label for readability\n  + on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n)\n",
+                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_max_replicas{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n  # Add the scaletargetref_name label for readability\n  + on (k8s_cluster_unique_name, service_namespace, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n)\n",
                         "format": "time_series",
                         "legendFormat": "Max {{ scaletargetref_name }}",
                         "legendLink": null
                      },
                      {
-                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_status_current_replicas{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n  # HPA doesn't go to 0 replicas, so we multiply by 0 if the HPA is not active\n  * on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler)\n    kube_horizontalpodautoscaler_status_condition{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\", condition=\"ScalingActive\", status=\"true\"}\n  # Add the scaletargetref_name label for readability\n  + on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n)\n",
+                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_status_current_replicas{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n  # HPA doesn't go to 0 replicas, so we multiply by 0 if the HPA is not active\n  * on (k8s_cluster_unique_name, service_namespace, horizontalpodautoscaler)\n    kube_horizontalpodautoscaler_status_condition{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\", condition=\"ScalingActive\", status=\"true\"}\n  # Add the scaletargetref_name label for readability\n  + on (k8s_cluster_unique_name, service_namespace, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n)\n",
                         "format": "time_series",
                         "legendFormat": "Current {{ scaletargetref_name }}",
                         "legendLink": null
                      },
                      {
-                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_min_replicas{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n  # Add the scaletargetref_name label for readability\n  + on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n)\n",
+                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_min_replicas{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n  # Add the scaletargetref_name label for readability\n  + on (k8s_cluster_unique_name, service_namespace, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"}\n)\n",
                         "format": "time_series",
                         "legendFormat": "Min {{ scaletargetref_name }}",
                         "legendLink": null
@@ -1399,7 +1399,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by(k8s_cluster_unique_name, k8s_namespace_name, scaler, metric, scaledObject) (\n  label_replace(\n    rate(keda_scaler_errors[$__rate_interval]),\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.+)\"\n  )\n) +\non(k8s_cluster_unique_name, k8s_namespace_name, metric, scaledObject) group_left\nlabel_replace(\n  label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"} * 0,\n      \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  ),\n  \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n)\n",
+                        "expr": "sum by(k8s_cluster_unique_name, service_namespace, scaler, metric, scaledObject) (\n  label_replace(\n    rate(keda_scaler_errors[$__rate_interval]),\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.+)\"\n  )\n) +\non(k8s_cluster_unique_name, service_namespace, metric, scaledObject) group_left\nlabel_replace(\n  label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"} * 0,\n      \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  ),\n  \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{scaler}} failures",
                         "legendLink": null
@@ -1460,7 +1460,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*cpu.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, k8s_namespace_name, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
+                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*cpu.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, service_namespace, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{ scaler }}",
                         "legendLink": null
@@ -1509,7 +1509,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*memory.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, k8s_namespace_name, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
+                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*memory.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, service_namespace, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{ scaler }}",
                         "legendLink": null
@@ -1558,7 +1558,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*queries.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, k8s_namespace_name, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
+                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\", scaler=~\".*queries.*\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, service_namespace, scaledObject, metric) group_left label_replace(\n    label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-ruler-querier\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n    ),\n    \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  )\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{ scaler }}",
                         "legendLink": null
@@ -1635,7 +1635,7 @@
                "multi": true,
                "name": "namespace",
                "options": [ ],
-               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, k8s_namespace_name)",
+               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, service_namespace)",
                "refresh": 1,
                "regex": "",
                "sort": 1,

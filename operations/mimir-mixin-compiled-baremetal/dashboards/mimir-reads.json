@@ -91,7 +91,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(\n  rate(\n    cortex_request_duration_seconds_count{\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\",\n      route=~\"(prometheus|api_prom)_api_v1_query\"\n    }[$__rate_interval]\n  )\n  or\n  rate(\n    cortex_prometheus_rule_evaluations_total{\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ruler|cortex|mimir|mimir-backend.*))\"\n    }[$__rate_interval]\n  )\n)\n",
+                        "expr": "sum(\n  rate(\n    cortex_request_duration_seconds_count{\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\",\n      route=~\"(prometheus|api_prom)_api_v1_query\"\n    }[$__rate_interval]\n  )\n  or\n  rate(\n    cortex_prometheus_rule_evaluations_total{\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ruler))\"\n    }[$__rate_interval]\n  )\n)\n",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -167,7 +167,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\",route=~\"(prometheus|api_prom)_api_v1_query_range\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\",route=~\"(prometheus|api_prom)_api_v1_query_range\"}[$__rate_interval]))",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -243,7 +243,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\",route=~\"(prometheus|api_prom)_api_v1_labels\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\",route=~\"(prometheus|api_prom)_api_v1_labels\"}[$__rate_interval]))",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -319,7 +319,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\",route=~\"(prometheus|api_prom)_api_v1_label_name_values\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\",route=~\"(prometheus|api_prom)_api_v1_label_name_values\"}[$__rate_interval]))",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -395,7 +395,7 @@
                   "steppedLine": false,
                   "targets": [
                      {
-                        "expr": "sum(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\",route=~\"(prometheus|api_prom)_api_v1_series\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\",route=~\"(prometheus|api_prom)_api_v1_series\"}[$__rate_interval]))",
                         "format": "time_series",
                         "instant": true,
                         "refId": "A"
@@ -624,7 +624,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -673,19 +673,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})",
+                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -735,7 +735,7 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval])))",
+                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval])))",
                         "format": "time_series",
                         "legendFormat": "",
                         "legendLink": null
@@ -932,7 +932,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -982,19 +982,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(cortex_query_scheduler_queue_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_query_scheduler_queue_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -1063,7 +1063,7 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "sum(min_over_time(cortex_query_scheduler_queue_length{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__interval]))",
+                        "expr": "sum(min_over_time(cortex_query_scheduler_queue_length{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__interval]))",
                         "format": "time_series",
                         "legendFormat": "Queue length",
                         "legendLink": null
@@ -1125,7 +1125,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "label_replace(histogram_quantile(0.99, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__rate_interval])) by (le, additional_queue_dimensions)) * 1e3, \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
+                        "expr": "label_replace(histogram_quantile(0.99, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__rate_interval])) by (le, additional_queue_dimensions)) * 1e3, \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
                         "format": "time_series",
                         "legendFormat": "99th Percentile: {{ additional_queue_dimensions }}",
                         "refId": "A"
@@ -1175,7 +1175,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "label_replace(histogram_quantile(0.50, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__rate_interval])) by (le, additional_queue_dimensions)) * 1e3, \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
+                        "expr": "label_replace(histogram_quantile(0.50, sum(rate(cortex_query_scheduler_queue_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__rate_interval])) by (le, additional_queue_dimensions)) * 1e3, \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
                         "format": "time_series",
                         "legendFormat": "50th Percentile: {{ additional_queue_dimensions }}",
                         "refId": "A"
@@ -1225,7 +1225,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "label_replace(sum(rate(cortex_query_scheduler_queue_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__rate_interval])) by (additional_queue_dimensions) * 1e3 / sum(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-scheduler.*|mimir-backend.*))\"}[$__rate_interval])) by (additional_queue_dimensions), \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
+                        "expr": "label_replace(sum(rate(cortex_query_scheduler_queue_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__rate_interval])) by (additional_queue_dimensions) * 1e3 / sum(rate(cortex_query_scheduler_queue_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-scheduler.*))\"}[$__rate_interval])) by (additional_queue_dimensions), \"additional_queue_dimensions\", \"none\", \"additional_queue_dimensions\", \"^$\")\n",
                         "format": "time_series",
                         "legendFormat": "Average: {{ additional_queue_dimensions }}",
                         "refId": "C"
@@ -1285,7 +1285,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum (\n  rate(thanos_memcached_operations_total{name=\"frontend-cache\", k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\"}[$__rate_interval])\n  or ignoring(backend)\n  rate(thanos_cache_operations_total{name=\"frontend-cache\", k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\"}[$__rate_interval])\n)\n",
+                        "expr": "sum (\n  rate(thanos_memcached_operations_total{name=\"frontend-cache\", k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\"}[$__rate_interval])\n  or ignoring(backend)\n  rate(thanos_cache_operations_total{name=\"frontend-cache\", k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\"}[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "legendFormat": "Requests/s",
                         "legendLink": null
@@ -1334,21 +1334,21 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", name=\"frontend-cache\"}[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", name=\"frontend-cache\"}[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", name=\"frontend-cache\"}[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", name=\"frontend-cache\"}[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", name=\"frontend-cache\"}[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", name=\"frontend-cache\"}[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", name=\"frontend-cache\"}[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", name=\"frontend-cache\"}[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", name=\"frontend-cache\"}[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", name=\"frontend-cache\"}[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", name=\"frontend-cache\"}[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((query-frontend.*|cortex|mimir|mimir-read.*))\", name=\"frontend-cache\"}[$__rate_interval])\n)\n",
+                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", name=\"frontend-cache\"}[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", name=\"frontend-cache\"}[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", name=\"frontend-cache\"}[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-query-frontend.*))\", name=\"frontend-cache\"}[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "Average",
@@ -1545,7 +1545,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_querier_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_querier_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -1594,19 +1594,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}) / sum(k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})",
+                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}) / sum(k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"})",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -1656,7 +1656,7 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_querier_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval])))",
+                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_querier_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\", route=~\"(prometheus|api_prom)_api_v1_.+\"}[$__rate_interval])))",
                         "format": "time_series",
                         "legendFormat": "",
                         "legendLink": null
@@ -1852,7 +1852,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\",route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ingester.*))\",route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -1901,19 +1901,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ingester.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"})) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ingester.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"})",
+                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ingester.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ingester.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"})",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -1963,7 +1963,7 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((ingester.*|cortex|mimir|mimir-write.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"}[$__rate_interval])))",
+                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-ingester.*))\", route=~\"/cortex.Ingester/(QueryStream|QueryExemplars|LabelValues|LabelNames|UserStats|AllUserStats|MetricsForLabelMatchers|MetricsMetadata|LabelNamesAndValues|LabelValuesCardinality|ActiveSeries)\"}[$__rate_interval])))",
                         "format": "time_series",
                         "legendFormat": "",
                         "legendLink": null
@@ -2159,7 +2159,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",route=~\"/gatewaypb.StoreGateway/.*\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",route=~\"/gatewaypb.StoreGateway/.*\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -2208,19 +2208,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", route=~\"/gatewaypb.StoreGateway/.*\"})) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", route=~\"/gatewaypb.StoreGateway/.*\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", route=~\"/gatewaypb.StoreGateway/.*\"})) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum by (le) (k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_bucket:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", route=~\"/gatewaypb.StoreGateway/.*\"})) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", route=~\"/gatewaypb.StoreGateway/.*\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", route=~\"/gatewaypb.StoreGateway/.*\"})",
+                        "expr": "1e3 * sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_sum:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", route=~\"/gatewaypb.StoreGateway/.*\"}) / sum(k8s_cluster_unique_name_job_route:cortex_request_duration_seconds_count:sum_rate{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", route=~\"/gatewaypb.StoreGateway/.*\"})",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -2270,7 +2270,7 @@
                   "targets": [
                      {
                         "exemplar": true,
-                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", route=~\"/gatewaypb.StoreGateway/.*\"}[$__rate_interval])))",
+                        "expr": "histogram_quantile(0.99, sum by(le, instance) (rate(cortex_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", route=~\"/gatewaypb.StoreGateway/.*\"}[$__rate_interval])))",
                         "format": "time_series",
                         "legendFormat": "",
                         "legendLink": null
@@ -2380,19 +2380,19 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_max_replicas{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n  # Add the scaletargetref_name label which is more readable than \"kube-hpa-...\"\n  + on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n)\n",
+                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_max_replicas{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n  # Add the scaletargetref_name label which is more readable than \"kube-hpa-...\"\n  + on (k8s_cluster_unique_name, service_namespace, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n)\n",
                         "format": "time_series",
                         "legendFormat": "Max {{ scaletargetref_name }}",
                         "legendLink": null
                      },
                      {
-                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_status_current_replicas{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n  # HPA doesn't go to 0 replicas, so we multiply by 0 if the HPA is not active.\n  * on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler)\n    kube_horizontalpodautoscaler_status_condition{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\", condition=\"ScalingActive\", status=\"true\"}\n  # Add the scaletargetref_name label which is more readable than \"kube-hpa-...\"\n  + on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n)\n",
+                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_status_current_replicas{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n  # HPA doesn't go to 0 replicas, so we multiply by 0 if the HPA is not active.\n  * on (k8s_cluster_unique_name, service_namespace, horizontalpodautoscaler)\n    kube_horizontalpodautoscaler_status_condition{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\", condition=\"ScalingActive\", status=\"true\"}\n  # Add the scaletargetref_name label which is more readable than \"kube-hpa-...\"\n  + on (k8s_cluster_unique_name, service_namespace, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n)\n",
                         "format": "time_series",
                         "legendFormat": "Current {{ scaletargetref_name }}",
                         "legendLink": null
                      },
                      {
-                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_min_replicas{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n  # Add the scaletargetref_name label which is more readable than \"kube-hpa-...\"\n  + on (k8s_cluster_unique_name, k8s_namespace_name, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n)\n",
+                        "expr": "max by (scaletargetref_name) (\n  kube_horizontalpodautoscaler_spec_min_replicas{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n  # Add the scaletargetref_name label which is more readable than \"kube-hpa-...\"\n  + on (k8s_cluster_unique_name, service_namespace, horizontalpodautoscaler) group_left (scaletargetref_name)\n    0*kube_horizontalpodautoscaler_info{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"}\n)\n",
                         "format": "time_series",
                         "legendFormat": "Min {{ scaletargetref_name }}",
                         "legendLink": null
@@ -2441,7 +2441,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, k8s_namespace_name, scaledObject, metric) group_left\n  label_replace(label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n  ), \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\")\n)\n",
+                        "expr": "sum by (scaler) (\n  label_replace(\n    keda_scaler_metrics_value{k8s_cluster_unique_name=~\"$cluster\", exported_namespace=~\"$namespace\"},\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.*)\"\n  )\n  /\n  on(k8s_cluster_unique_name, service_namespace, scaledObject, metric) group_left\n  label_replace(label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"},\n      \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n  ), \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\")\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{ scaler }}",
                         "legendLink": null
@@ -2490,7 +2490,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(k8s_cluster_unique_name, k8s_namespace_name, scaler, metric, scaledObject) (\n  label_replace(\n    rate(keda_scaler_errors[$__rate_interval]),\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.+)\"\n  )\n) +\non(k8s_cluster_unique_name, k8s_namespace_name, metric, scaledObject) group_left\nlabel_replace(\n  label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"} * 0,\n      \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  ),\n  \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n)\n",
+                        "expr": "sum by(k8s_cluster_unique_name, service_namespace, scaler, metric, scaledObject) (\n  label_replace(\n    rate(keda_scaler_errors[$__rate_interval]),\n    \"namespace\", \"$1\", \"exported_namespace\", \"(.+)\"\n  )\n) +\non(k8s_cluster_unique_name, service_namespace, metric, scaledObject) group_left\nlabel_replace(\n  label_replace(\n      kube_horizontalpodautoscaler_spec_target_metric{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\", horizontalpodautoscaler=~\"keda-hpa-querier\"} * 0,\n      \"scaledObject\", \"$1\", \"horizontalpodautoscaler\", \"keda-hpa-(.*)\"\n  ),\n  \"metric\", \"$1\", \"metric_name\", \"(.+)\"\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{scaler}} failures",
                         "legendLink": null
@@ -2686,7 +2686,7 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", kv_name=~\"store-gateway\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
+                        "expr": "sum by (status) (\n  label_replace(label_replace(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", kv_name=~\"store-gateway\"}[$__rate_interval]),\n  \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),\n  \"status\", \"${1}\", \"status_code\", \"([a-zA-Z]+)\"))\n",
                         "format": "time_series",
                         "legendFormat": "{{status}}",
                         "refId": "A"
@@ -2735,19 +2735,19 @@
                   "span": 6,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", kv_name=~\"store-gateway\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", kv_name=~\"store-gateway\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", kv_name=~\"store-gateway\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(cortex_kv_request_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", kv_name=~\"store-gateway\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(cortex_kv_request_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", kv_name=~\"store-gateway\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\", kv_name=~\"store-gateway\"}[$__rate_interval]))",
+                        "expr": "sum(rate(cortex_kv_request_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", kv_name=~\"store-gateway\"}[$__rate_interval])) * 1e3 / sum(rate(cortex_kv_request_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\", kv_name=~\"store-gateway\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -2825,7 +2825,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(operation) (\n  # Backwards compatibility\n  rate(\n    thanos_memcached_operations_total{\n      component=\"store-gateway\",\n      name=\"index-cache\",\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\"\n    }[$__rate_interval]\n  )\n  or ignoring(backend)\n  rate(\n    thanos_cache_operations_total{\n      component=\"store-gateway\",\n      name=\"index-cache\",\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\"\n    }[$__rate_interval]\n  )\n)\n",
+                        "expr": "sum by(operation) (\n  # Backwards compatibility\n  rate(\n    thanos_memcached_operations_total{\n      component=\"store-gateway\",\n      name=\"index-cache\",\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\"\n    }[$__rate_interval]\n  )\n  or ignoring(backend)\n  rate(\n    thanos_cache_operations_total{\n      component=\"store-gateway\",\n      name=\"index-cache\",\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\"\n    }[$__rate_interval]\n  )\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{operation}}",
                         "legendLink": null
@@ -2874,21 +2874,21 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n)\n",
+                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"index-cache\"\n}\n[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "Average",
@@ -2938,7 +2938,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(item_type) (\n  rate(\n    thanos_store_index_cache_hits_total{\n      component=\"store-gateway\",\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\"\n    }[$__rate_interval]\n  )\n)\n/\nsum by(item_type) (\n  rate(\n    thanos_store_index_cache_requests_total{\n      component=\"store-gateway\",\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\"\n    }[$__rate_interval]\n  )\n)\n",
+                        "expr": "sum by(item_type) (\n  rate(\n    thanos_store_index_cache_hits_total{\n      component=\"store-gateway\",\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\"\n    }[$__rate_interval]\n  )\n)\n/\nsum by(item_type) (\n  rate(\n    thanos_store_index_cache_requests_total{\n      component=\"store-gateway\",\n      k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\"\n    }[$__rate_interval]\n  )\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{item_type}}",
                         "legendLink": null
@@ -2998,7 +2998,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(operation) (\n  # Backwards compatibility\n  rate(thanos_memcached_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n  or ignoring(backend)\n  rate(thanos_cache_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n)\n",
+                        "expr": "sum by(operation) (\n  # Backwards compatibility\n  rate(thanos_memcached_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n  or ignoring(backend)\n  rate(thanos_cache_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{operation}}",
                         "legendLink": null
@@ -3047,21 +3047,21 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n)\n",
+                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"chunks-cache\"\n}\n[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "Average",
@@ -3110,7 +3110,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n)\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n)\n",
+                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n)\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"chunks-cache\"\n  }[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "legendFormat": "items",
                         "legendLink": null
@@ -3170,7 +3170,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(operation) (\n  # Backwards compatibility\n  rate(thanos_memcached_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or ignoring(backend)\n  rate(thanos_cache_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n",
+                        "expr": "sum by(operation) (\n  # Backwards compatibility\n  rate(thanos_memcached_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or ignoring(backend)\n  rate(thanos_cache_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{operation}}",
                         "legendLink": null
@@ -3219,21 +3219,21 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n)\n",
+                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n  operation=\"getmulti\",\n  component=\"store-gateway\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "Average",
@@ -3282,7 +3282,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((store-gateway.*|cortex|mimir|mimir-backend.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n",
+                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-store-gateway.*))\",\n    component=\"store-gateway\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "legendFormat": "items",
                         "legendLink": null
@@ -3342,7 +3342,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum by(operation) (\n  # Backwards compatibility\n  rate(thanos_memcached_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or ignoring(backend)\n  rate(thanos_cache_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n",
+                        "expr": "sum by(operation) (\n  # Backwards compatibility\n  rate(thanos_memcached_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or ignoring(backend)\n  rate(thanos_cache_operations_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "legendFormat": "{{operation}}",
                         "legendLink": null
@@ -3391,21 +3391,21 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.99, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
+                        "expr": "histogram_quantile(0.50, sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_bucket{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) by (le)) * 1e3\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n)\n",
+                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_sum{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n) * 1e3\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_memcached_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n  or\n  rate(thanos_cache_operation_duration_seconds_count{\n  k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n  operation=\"getmulti\",\n  component=\"querier\",\n  name=\"metadata-cache\"\n}\n[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "intervalFactor": 2,
                         "legendFormat": "Average",
@@ -3454,7 +3454,7 @@
                   "span": 4,
                   "targets": [
                      {
-                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((querier.*|cortex|mimir|mimir-read.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n",
+                        "expr": "sum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_hits_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n/\nsum(\n  # Backwards compatibility\n  rate(thanos_cache_memcached_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n  or\n  rate(thanos_cache_requests_total{\n    k8s_cluster_unique_name=~\"$cluster\", job=~\"($namespace)/((mimir-querier.*))\",\n    component=\"querier\",\n    name=\"metadata-cache\"\n  }[$__rate_interval])\n)\n",
                         "format": "time_series",
                         "legendFormat": "items",
                         "legendLink": null
@@ -3514,7 +3514,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operations_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\"}[$__rate_interval]))",
+                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operations_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "{{operation}}",
                         "legendLink": null
@@ -3547,7 +3547,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operation_failures_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\"}[$__rate_interval])) / sum by(operation) (rate(thanos_objstore_bucket_operations_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\"}[$__rate_interval])) >= 0",
+                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operation_failures_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\"}[$__rate_interval])) / sum by(operation) (rate(thanos_objstore_bucket_operations_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\"}[$__rate_interval])) >= 0",
                         "format": "time_series",
                         "legendFormat": "{{operation}}",
                         "legendLink": null
@@ -3596,19 +3596,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"attributes\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"attributes\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"attributes\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"attributes\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -3675,19 +3675,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"exists\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"exists\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"exists\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"exists\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -3766,19 +3766,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"get\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"get\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"get\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"get\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -3845,19 +3845,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"get_range\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"get_range\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"get_range\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"get_range\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -3924,19 +3924,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"upload\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"upload\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"upload\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"upload\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -4003,19 +4003,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"delete\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"store-gateway\",operation=\"delete\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"delete\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"store-gateway\",operation=\"delete\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -4093,7 +4093,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operations_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\"}[$__rate_interval]))",
+                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operations_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "{{operation}}",
                         "legendLink": null
@@ -4126,7 +4126,7 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operation_failures_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\"}[$__rate_interval])) / sum by(operation) (rate(thanos_objstore_bucket_operations_total{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\"}[$__rate_interval])) >= 0",
+                        "expr": "sum by(operation) (rate(thanos_objstore_bucket_operation_failures_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\"}[$__rate_interval])) / sum by(operation) (rate(thanos_objstore_bucket_operations_total{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\"}[$__rate_interval])) >= 0",
                         "format": "time_series",
                         "legendFormat": "{{operation}}",
                         "legendLink": null
@@ -4175,19 +4175,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"attributes\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"attributes\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"attributes\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"attributes\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"attributes\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -4254,19 +4254,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"exists\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"exists\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"exists\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"exists\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"exists\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -4345,19 +4345,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"get\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"get\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"get\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"get\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"get\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -4424,19 +4424,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"get_range\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"get_range\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"get_range\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"get_range\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"get_range\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -4503,19 +4503,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"upload\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"upload\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"upload\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"upload\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"upload\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -4582,19 +4582,19 @@
                   "span": 3,
                   "targets": [
                      {
-                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.99, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "99th Percentile",
                         "refId": "A"
                      },
                      {
-                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
+                        "expr": "histogram_quantile(0.50, sum(rate(thanos_objstore_bucket_operation_duration_seconds_bucket{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"delete\"}[$__rate_interval])) by (le)) * 1e3",
                         "format": "time_series",
                         "legendFormat": "50th Percentile",
                         "refId": "B"
                      },
                      {
-                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"delete\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", k8s_namespace_name=~\"$namespace\",component=\"querier\",operation=\"delete\"}[$__rate_interval]))",
+                        "expr": "sum(rate(thanos_objstore_bucket_operation_duration_seconds_sum{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"delete\"}[$__rate_interval])) * 1e3 / sum(rate(thanos_objstore_bucket_operation_duration_seconds_count{k8s_cluster_unique_name=~\"$cluster\", service_namespace=~\"$namespace\",component=\"querier\",operation=\"delete\"}[$__rate_interval]))",
                         "format": "time_series",
                         "legendFormat": "Average",
                         "refId": "C"
@@ -4689,7 +4689,7 @@
                "multi": true,
                "name": "namespace",
                "options": [ ],
-               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, k8s_namespace_name)",
+               "query": "label_values(cortex_build_info{k8s_cluster_unique_name=~\"$cluster\"}, service_namespace)",
                "refresh": 1,
                "regex": "",
                "sort": 1,

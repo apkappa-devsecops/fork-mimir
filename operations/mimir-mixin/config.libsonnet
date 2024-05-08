@@ -71,26 +71,26 @@
     // Whenever you do any change here, please reflect it in the doc at:
     // docs/sources/mimir/manage/monitoring-grafana-mimir/requirements.md
     job_names: {
-      ingester: ['ingester.*', 'cortex', 'mimir', 'mimir-write.*'],  // Match also custom and per-zone ingester deployments.
-      distributor: ['distributor.*', 'cortex', 'mimir', 'mimir-write.*'],  // Match also per-zone distributor deployments.
-      querier: ['querier.*', 'cortex', 'mimir', 'mimir-read.*'],  // Match also custom querier deployments.
-      ruler_querier: ['ruler-querier.*'],  // Match also custom querier deployments.
-      ruler: ['ruler', 'cortex', 'mimir', 'mimir-backend.*'],
-      query_frontend: ['query-frontend.*', 'cortex', 'mimir', 'mimir-read.*'],  // Match also custom query-frontend deployments.
-      ruler_query_frontend: ['ruler-query-frontend.*'],  // Match also custom ruler-query-frontend deployments.
-      query_scheduler: ['query-scheduler.*', 'mimir-backend.*'],  // Not part of single-binary. Match also custom query-scheduler deployments.
-      ruler_query_scheduler: ['ruler-query-scheduler.*'],  // Not part of single-binary. Match also custom query-scheduler deployments.
-      ring_members: ['admin-api', 'alertmanager', 'compactor.*', 'distributor.*', 'ingester.*', 'querier.*', 'ruler', 'ruler-querier.*', 'store-gateway.*', 'cortex', 'mimir', 'mimir-write.*', 'mimir-read.*', 'mimir-backend.*'],
-      store_gateway: ['store-gateway.*', 'cortex', 'mimir', 'mimir-backend.*'],  // Match also per-zone store-gateway deployments.
-      gateway: ['gateway', 'cortex-gw.*'],  // Match also custom and per-zone gateway deployments.
-      compactor: ['compactor.*', 'cortex', 'mimir', 'mimir-backend.*'],  // Match also custom compactor deployments.
-      alertmanager: ['alertmanager', 'cortex', 'mimir', 'mimir-backend.*'],
-      overrides_exporter: ['overrides-exporter', 'mimir-backend.*'],
+      ingester: ['mimir-ingester.*'],  // Match also custom and per-zone ingester deployments.
+      distributor: ['mimir-distributor.*'],  // Match also per-zone distributor deployments.
+      querier: ['mimir-querier.*'],  // Match also custom querier deployments.
+      ruler_querier: ['mimir-ruler-querier.*'],  // Match also custom querier deployments.
+      ruler: ['mimir-ruler'],
+      query_frontend: ['mimir-query-frontend.*'],  // Match also custom query-frontend deployments.
+      ruler_query_frontend: ['mimir-ruler-query-frontend.*'],  // Match also custom ruler-query-frontend deployments.
+      query_scheduler: ['mimir-query-scheduler.*'],  // Not part of single-binary. Match also custom query-scheduler deployments.
+      ruler_query_scheduler: ['mimir-ruler-query-scheduler.*'],  // Not part of single-binary. Match also custom query-scheduler deployments.
+      ring_members: ['admin-api', 'alertmanager', 'compactor.*', 'distributor.*', 'ingester.*', 'querier.*', 'ruler', 'ruler-querier.*', 'store-gateway.*'],
+      store_gateway: ['mimir-store-gateway.*'],  // Match also per-zone store-gateway deployments.
+      gateway: ['mimir-gateway'],  // Match also custom and per-zone gateway deployments.
+      compactor: ['mimir-compactor.*'],  // Match also custom compactor deployments.
+      alertmanager: ['mimir-alertmanager'],
+      overrides_exporter: ['mimir-overrides-exporter'],
 
       // The following are job matchers used to select all components in a given "path".
-      write: ['distributor.*', 'ingester.*', 'mimir-write.*'],
-      read: ['query-frontend.*', 'querier.*', 'ruler-query-frontend.*', 'ruler-querier.*', 'mimir-read.*'],
-      backend: ['ruler', 'query-scheduler.*', 'ruler-query-scheduler.*', 'store-gateway.*', 'compactor.*', 'alertmanager', 'overrides-exporter', 'mimir-backend.*'],
+      write: ['mimir-distributor.*', 'mimir-ingester.*'],
+      read: ['mimir-query-frontend.*', 'mimir-querier.*', 'mimir-ruler-query-frontend.*', 'mimir-ruler-querier.*'],
+      backend: ['mimir-ruler', 'mimir-query-scheduler.*', 'mimir-ruler-query-scheduler.*', 'mimir-store-gateway.*', 'mimir-compactor.*', 'mimir-alertmanager', 'mimir-overrides-exporter'],
     },
 
     // Name selectors for different application instances, using the "per_instance_label".
@@ -176,7 +176,7 @@
 
     // The label used to differentiate between different Kubernetes clusters.
     per_cluster_label: 'k8s_cluster_unique_name',
-    per_namespace_label: 'k8s_namespace_name',
+    per_namespace_label: 'service_namespace',
     per_job_label: 'job',
     per_component_loki_label: 'name',
 
@@ -213,7 +213,7 @@
     alertmanager_im_enabled: false,
 
     // The label used to differentiate between different application instances (i.e. 'pod' in a kubernetes install).
-    per_instance_label: 'k8s_pod_uid',
+    per_instance_label: 'instance',
 
     deployment_type: 'kubernetes',
     // System mount point where mimir stores its data, used for baremetal

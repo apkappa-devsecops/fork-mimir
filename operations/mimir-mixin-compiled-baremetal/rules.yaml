@@ -33,20 +33,20 @@ groups:
           record: k8s_cluster_unique_name_job_route:cortex_request_duration_seconds:sum_rate
     - name: mimir_api_3
       rules:
-        - expr: histogram_quantile(0.99, sum(rate(cortex_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, k8s_namespace_name, job, route))
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_request_duration_seconds:99quantile
-        - expr: histogram_quantile(0.50, sum(rate(cortex_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, k8s_namespace_name, job, route))
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_request_duration_seconds:50quantile
-        - expr: sum(rate(cortex_request_duration_seconds_sum[1m])) by (k8s_cluster_unique_name, k8s_namespace_name, job, route) / sum(rate(cortex_request_duration_seconds_count[1m])) by (k8s_cluster_unique_name, k8s_namespace_name, job, route)
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_request_duration_seconds:avg
-        - expr: sum(rate(cortex_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, k8s_namespace_name, job, route)
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_request_duration_seconds_bucket:sum_rate
-        - expr: sum(rate(cortex_request_duration_seconds_sum[1m])) by (k8s_cluster_unique_name, k8s_namespace_name, job, route)
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_request_duration_seconds_sum:sum_rate
-        - expr: sum(rate(cortex_request_duration_seconds_count[1m])) by (k8s_cluster_unique_name, k8s_namespace_name, job, route)
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_request_duration_seconds_count:sum_rate
-        - expr: sum(rate(cortex_request_duration_seconds[1m])) by (k8s_cluster_unique_name, k8s_namespace_name, job, route)
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_request_duration_seconds:sum_rate
+        - expr: histogram_quantile(0.99, sum(rate(cortex_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, service_namespace, job, route))
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_request_duration_seconds:99quantile
+        - expr: histogram_quantile(0.50, sum(rate(cortex_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, service_namespace, job, route))
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_request_duration_seconds:50quantile
+        - expr: sum(rate(cortex_request_duration_seconds_sum[1m])) by (k8s_cluster_unique_name, service_namespace, job, route) / sum(rate(cortex_request_duration_seconds_count[1m])) by (k8s_cluster_unique_name, service_namespace, job, route)
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_request_duration_seconds:avg
+        - expr: sum(rate(cortex_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, service_namespace, job, route)
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_request_duration_seconds_bucket:sum_rate
+        - expr: sum(rate(cortex_request_duration_seconds_sum[1m])) by (k8s_cluster_unique_name, service_namespace, job, route)
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_request_duration_seconds_sum:sum_rate
+        - expr: sum(rate(cortex_request_duration_seconds_count[1m])) by (k8s_cluster_unique_name, service_namespace, job, route)
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_request_duration_seconds_count:sum_rate
+        - expr: sum(rate(cortex_request_duration_seconds[1m])) by (k8s_cluster_unique_name, service_namespace, job, route)
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_request_duration_seconds:sum_rate
     - name: mimir_querier_api
       rules:
         - expr: histogram_quantile(0.99, sum(rate(cortex_querier_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, job))
@@ -73,18 +73,18 @@ groups:
           record: k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_sum:sum_rate
         - expr: sum(rate(cortex_querier_request_duration_seconds_count[1m])) by (k8s_cluster_unique_name, job, route)
           record: k8s_cluster_unique_name_job_route:cortex_querier_request_duration_seconds_count:sum_rate
-        - expr: histogram_quantile(0.99, sum(rate(cortex_querier_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, k8s_namespace_name, job, route))
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_querier_request_duration_seconds:99quantile
-        - expr: histogram_quantile(0.50, sum(rate(cortex_querier_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, k8s_namespace_name, job, route))
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_querier_request_duration_seconds:50quantile
-        - expr: sum(rate(cortex_querier_request_duration_seconds_sum[1m])) by (k8s_cluster_unique_name, k8s_namespace_name, job, route) / sum(rate(cortex_querier_request_duration_seconds_count[1m])) by (k8s_cluster_unique_name, k8s_namespace_name, job, route)
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_querier_request_duration_seconds:avg
-        - expr: sum(rate(cortex_querier_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, k8s_namespace_name, job, route)
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate
-        - expr: sum(rate(cortex_querier_request_duration_seconds_sum[1m])) by (k8s_cluster_unique_name, k8s_namespace_name, job, route)
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_querier_request_duration_seconds_sum:sum_rate
-        - expr: sum(rate(cortex_querier_request_duration_seconds_count[1m])) by (k8s_cluster_unique_name, k8s_namespace_name, job, route)
-          record: k8s_cluster_unique_name_k8s_namespace_name_job_route:cortex_querier_request_duration_seconds_count:sum_rate
+        - expr: histogram_quantile(0.99, sum(rate(cortex_querier_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, service_namespace, job, route))
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_querier_request_duration_seconds:99quantile
+        - expr: histogram_quantile(0.50, sum(rate(cortex_querier_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, service_namespace, job, route))
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_querier_request_duration_seconds:50quantile
+        - expr: sum(rate(cortex_querier_request_duration_seconds_sum[1m])) by (k8s_cluster_unique_name, service_namespace, job, route) / sum(rate(cortex_querier_request_duration_seconds_count[1m])) by (k8s_cluster_unique_name, service_namespace, job, route)
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_querier_request_duration_seconds:avg
+        - expr: sum(rate(cortex_querier_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, service_namespace, job, route)
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_querier_request_duration_seconds_bucket:sum_rate
+        - expr: sum(rate(cortex_querier_request_duration_seconds_sum[1m])) by (k8s_cluster_unique_name, service_namespace, job, route)
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_querier_request_duration_seconds_sum:sum_rate
+        - expr: sum(rate(cortex_querier_request_duration_seconds_count[1m])) by (k8s_cluster_unique_name, service_namespace, job, route)
+          record: k8s_cluster_unique_name_service_namespace_job_route:cortex_querier_request_duration_seconds_count:sum_rate
     - name: mimir_storage
       rules:
         - expr: histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket[1m])) by (le, k8s_cluster_unique_name, job))
@@ -166,43 +166,43 @@ groups:
     - name: mimir_received_samples
       rules:
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, job) (rate(cortex_distributor_received_samples_total[5m]))
-          record: k8s_cluster_unique_name_k8s_namespace_name_job:cortex_distributor_received_samples:rate5m
+            sum by (k8s_cluster_unique_name, service_namespace, job) (rate(cortex_distributor_received_samples_total[5m]))
+          record: k8s_cluster_unique_name_service_namespace_job:cortex_distributor_received_samples:rate5m
     - name: mimir_exemplars_in
       rules:
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, job) (rate(cortex_distributor_exemplars_in_total[5m]))
-          record: k8s_cluster_unique_name_k8s_namespace_name_job:cortex_distributor_exemplars_in:rate5m
+            sum by (k8s_cluster_unique_name, service_namespace, job) (rate(cortex_distributor_exemplars_in_total[5m]))
+          record: k8s_cluster_unique_name_service_namespace_job:cortex_distributor_exemplars_in:rate5m
     - name: mimir_received_exemplars
       rules:
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, job) (rate(cortex_distributor_received_exemplars_total[5m]))
-          record: k8s_cluster_unique_name_k8s_namespace_name_job:cortex_distributor_received_exemplars:rate5m
+            sum by (k8s_cluster_unique_name, service_namespace, job) (rate(cortex_distributor_received_exemplars_total[5m]))
+          record: k8s_cluster_unique_name_service_namespace_job:cortex_distributor_received_exemplars:rate5m
     - name: mimir_exemplars_ingested
       rules:
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, job) (rate(cortex_ingester_ingested_exemplars_total[5m]))
-          record: k8s_cluster_unique_name_k8s_namespace_name_job:cortex_ingester_ingested_exemplars:rate5m
+            sum by (k8s_cluster_unique_name, service_namespace, job) (rate(cortex_ingester_ingested_exemplars_total[5m]))
+          record: k8s_cluster_unique_name_service_namespace_job:cortex_ingester_ingested_exemplars:rate5m
     - name: mimir_exemplars_appended
       rules:
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, job) (rate(cortex_ingester_tsdb_exemplar_exemplars_appended_total[5m]))
-          record: k8s_cluster_unique_name_k8s_namespace_name_job:cortex_ingester_tsdb_exemplar_exemplars_appended:rate5m
+            sum by (k8s_cluster_unique_name, service_namespace, job) (rate(cortex_ingester_tsdb_exemplar_exemplars_appended_total[5m]))
+          record: k8s_cluster_unique_name_service_namespace_job:cortex_ingester_tsdb_exemplar_exemplars_appended:rate5m
     - name: mimir_scaling_rules
       rules:
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, deployment) (
+            sum by (k8s_cluster_unique_name, service_namespace, deployment) (
               label_replace(
                 cortex_build_info{namespace="baremetal"},
                 "deployment", "$1", "job", "baremetal/(.*)"
               )
             )
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment:actual_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment:actual_replicas:count
         - expr: |
             ceil(
               quantile_over_time(0.99,
-                sum by (k8s_cluster_unique_name, k8s_namespace_name) (
-                  k8s_cluster_unique_name_k8s_namespace_name_job:cortex_distributor_received_samples:rate5m
+                sum by (k8s_cluster_unique_name, service_namespace) (
+                  k8s_cluster_unique_name_service_namespace_job:cortex_distributor_received_samples:rate5m
                 )[24h:]
               )
               / 240000
@@ -210,21 +210,21 @@ groups:
           labels:
             deployment: distributor
             reason: sample_rate
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count
         - expr: |
             ceil(
-              sum by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_limits_overrides{limit_name="ingestion_rate"})
+              sum by (k8s_cluster_unique_name, service_namespace) (cortex_limits_overrides{limit_name="ingestion_rate"})
               * 0.59999999999999998 / 240000
             )
           labels:
             deployment: distributor
             reason: sample_rate_limits
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count
         - expr: |
             ceil(
               quantile_over_time(0.99,
-                sum by (k8s_cluster_unique_name, k8s_namespace_name) (
-                  k8s_cluster_unique_name_k8s_namespace_name_job:cortex_distributor_received_samples:rate5m
+                sum by (k8s_cluster_unique_name, service_namespace) (
+                  k8s_cluster_unique_name_service_namespace_job:cortex_distributor_received_samples:rate5m
                 )[24h:]
               )
               * 3 / 80000
@@ -232,11 +232,11 @@ groups:
           labels:
             deployment: ingester
             reason: sample_rate
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count
         - expr: |
             ceil(
               quantile_over_time(0.99,
-                sum by(k8s_cluster_unique_name, k8s_namespace_name) (
+                sum by(k8s_cluster_unique_name, service_namespace) (
                   cortex_ingester_memory_series
                 )[24h:]
               )
@@ -245,41 +245,41 @@ groups:
           labels:
             deployment: ingester
             reason: active_series
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count
         - expr: |
             ceil(
-              sum by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_limits_overrides{limit_name="max_global_series_per_user"})
+              sum by (k8s_cluster_unique_name, service_namespace) (cortex_limits_overrides{limit_name="max_global_series_per_user"})
               * 3 * 0.59999999999999998 / 1500000
             )
           labels:
             deployment: ingester
             reason: active_series_limits
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count
         - expr: |
             ceil(
-              sum by (k8s_cluster_unique_name, k8s_namespace_name) (cortex_limits_overrides{limit_name="ingestion_rate"})
+              sum by (k8s_cluster_unique_name, service_namespace) (cortex_limits_overrides{limit_name="ingestion_rate"})
               * 0.59999999999999998 / 80000
             )
           labels:
             deployment: ingester
             reason: sample_rate_limits
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count
         - expr: |
             ceil(
-              (sum by (k8s_cluster_unique_name, k8s_namespace_name) (
+              (sum by (k8s_cluster_unique_name, service_namespace) (
                 cortex_ingester_tsdb_storage_blocks_bytes{job=~".+/ingester.*"}
               ) / 4)
                 /
-              avg by (k8s_cluster_unique_name, k8s_namespace_name) (
+              avg by (k8s_cluster_unique_name, service_namespace) (
                 memcached_limit_bytes{job=~".+/memcached"}
               )
             )
           labels:
             deployment: memcached
             reason: active_series
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, deployment) (
+            sum by (k8s_cluster_unique_name, service_namespace, deployment) (
               irate(
                 label_replace(
                   process_cpu_seconds_total{namespace="baremetal"},
@@ -287,9 +287,9 @@ groups:
                 )[5m:]
               )
             )
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment:container_cpu_usage_seconds_total:sum_rate
+          record: k8s_cluster_unique_name_service_namespace_deployment:container_cpu_usage_seconds_total:sum_rate
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, deployment) (
+            sum by (k8s_cluster_unique_name, service_namespace, deployment) (
               count without(cpu, mode) (
                 label_replace(
                   node_cpu_seconds_total{mode="idle"},
@@ -297,49 +297,49 @@ groups:
                 )
               )
             )
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment:kube_pod_container_resource_requests_cpu_cores:sum
+          record: k8s_cluster_unique_name_service_namespace_deployment:kube_pod_container_resource_requests_cpu_cores:sum
         - expr: |
             ceil(
-              k8s_cluster_unique_name_k8s_namespace_name_deployment:actual_replicas:count
+              k8s_cluster_unique_name_service_namespace_deployment:actual_replicas:count
                 *
-              quantile_over_time(0.99, k8s_cluster_unique_name_k8s_namespace_name_deployment:container_cpu_usage_seconds_total:sum_rate[24h])
+              quantile_over_time(0.99, k8s_cluster_unique_name_service_namespace_deployment:container_cpu_usage_seconds_total:sum_rate[24h])
                 /
-              k8s_cluster_unique_name_k8s_namespace_name_deployment:kube_pod_container_resource_requests_cpu_cores:sum
+              k8s_cluster_unique_name_service_namespace_deployment:kube_pod_container_resource_requests_cpu_cores:sum
                 /
               0.66000000000000003
             )
           labels:
             reason: cpu_usage
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, deployment) (
+            sum by (k8s_cluster_unique_name, service_namespace, deployment) (
               label_replace(
                 process_resident_memory_bytes{namespace="baremetal"},
                 "deployment", "$1", "job", "baremetal/(.*)"
               )
             )
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment:container_memory_usage_bytes:sum
+          record: k8s_cluster_unique_name_service_namespace_deployment:container_memory_usage_bytes:sum
         - expr: |
-            sum by (k8s_cluster_unique_name, k8s_namespace_name, deployment) (
+            sum by (k8s_cluster_unique_name, service_namespace, deployment) (
               label_replace(
                 node_memory_MemTotal_bytes,
                 "deployment", "$1", "instance", ".*(distributor|ingester|mimir-write|query-frontend|querier|ruler-query-frontend|ruler-querier|mimir-read|query-scheduler|ruler-query-scheduler|ruler|store-gateway|compactor|alertmanager|overrides-exporter|mimir-backend).*"
               )
             )
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment:kube_pod_container_resource_requests_memory_bytes:sum
+          record: k8s_cluster_unique_name_service_namespace_deployment:kube_pod_container_resource_requests_memory_bytes:sum
         - expr: |
             ceil(
-              k8s_cluster_unique_name_k8s_namespace_name_deployment:actual_replicas:count
+              k8s_cluster_unique_name_service_namespace_deployment:actual_replicas:count
                 *
-              quantile_over_time(0.99, k8s_cluster_unique_name_k8s_namespace_name_deployment:container_memory_usage_bytes:sum[24h])
+              quantile_over_time(0.99, k8s_cluster_unique_name_service_namespace_deployment:container_memory_usage_bytes:sum[24h])
                 /
-              k8s_cluster_unique_name_k8s_namespace_name_deployment:kube_pod_container_resource_requests_memory_bytes:sum
+              k8s_cluster_unique_name_service_namespace_deployment:kube_pod_container_resource_requests_memory_bytes:sum
                 /
               0.66000000000000003
             )
           labels:
             reason: memory_usage
-          record: k8s_cluster_unique_name_k8s_namespace_name_deployment_reason:required_replicas:count
+          record: k8s_cluster_unique_name_service_namespace_deployment_reason:required_replicas:count
     - name: mimir_alertmanager_rules
       rules:
         - expr: |
@@ -375,5 +375,5 @@ groups:
     - name: mimir_ingester_rules
       rules:
         - expr: |
-            sum by(k8s_cluster_unique_name, k8s_namespace_name, instance) (rate(cortex_ingester_ingested_samples_total[1m]))
-          record: k8s_cluster_unique_name_k8s_namespace_name_instance:cortex_ingester_ingested_samples_total:rate1m
+            sum by(k8s_cluster_unique_name, service_namespace, instance) (rate(cortex_ingester_ingested_samples_total[1m]))
+          record: k8s_cluster_unique_name_service_namespace_instance:cortex_ingester_ingested_samples_total:rate1m
